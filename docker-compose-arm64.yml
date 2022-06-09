@@ -1,0 +1,23 @@
+version: '3'
+services:
+  nginx:
+    container_name: nginx
+    image: ${ARCHITECTURE:i386}/nginx:stable-alpine
+    volumes:
+      - ./:/var/www/
+      - ./docker/site.conf:/etc/nginx/conf.d/site.conf
+    environment:
+      WEB_ALIAS_DOMAIN: coffee-shop.localhost
+    networks:
+      - network
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - php-fpm
+volumes:
+  db_data:
+    driver: "local"
+networks:
+  network:
+    driver: "bridge"

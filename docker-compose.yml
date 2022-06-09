@@ -1,0 +1,47 @@
+version: '3'
+services:
+  nginx:
+    container_name: nginx
+    image: ${ARCHITECTURE}/nginx:stable-alpine
+    volumes:
+      - ./:/var/www/
+      - ./docker/site.conf:/etc/nginx/conf.d/site.conf
+    environment:
+      WEB_ALIAS_DOMAIN: coffee-shop.localhost
+    networks:
+      - network
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - php-fpm
+  php-fpm:
+    container_name: coffee_shop_php
+    image: cyberduck/php-fpm-laravel:8.0
+    volumes:
+      - ./:/var/www/
+      - ./vendor:/var/www/vendor:delegated
+      - ./storage:/var/www/storage:delegated
+      - ./node_modules:/var/www/node_modules:cached
+    networks:
+      - network
+  db:
+    container_name: coffee_shop_db
+    image: mariadb:10.3
+    ports:
+      - '${FORWARD_DB_PORT:-3306}:3306'
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: project
+      MYSQL_USER: project
+      MYSQL_PASSWORD: secret
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - network
+volumes:
+  db_data:
+    driver: "local"
+networks:
+  network:
+    driver: "bridge"
