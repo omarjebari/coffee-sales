@@ -3,10 +3,13 @@
 namespace Tests\Feature\Sale;
 
 use App\Models\Coffee;
+use App\Models\ShippingCost;
 use App\Models\User;
 use App\Services\Interfaces\SaleServiceInterface;
 use App\Services\SaleService;
+use App\Services\ShippingCostService;
 use Database\Seeders\CoffeeSeeder;
+use Database\Seeders\ShippingCostSeeder;
 use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\Sanctum;
@@ -19,15 +22,19 @@ class CreateSaleTest extends TestCase
     protected SaleServiceInterface $saleService;
     protected User $user;
     protected Coffee $coffee;
+    protected ShippingCost $shippingCost;
 
     protected function setUp(): void
     {
         parent::setUp();
         $this->seed(UserSeeder::class);
         $this->seed(CoffeeSeeder::class);
+        $this->seed(ShippingCostSeeder::class);
         $this->saleService = new SaleService();
+        $this->shippingCostService = new ShippingCostService();
         $this->user = User::all()->first();
         $this->coffee = Coffee::all()->first();
+        $this->shippingCost = $this->shippingCostService->getLatest();
     }
 
     public function test_sale_is_stored()
@@ -36,9 +43,8 @@ class CreateSaleTest extends TestCase
         $quantity = 100;
         $unitCost = 10;
         $profitMargin = $this->coffee->profit_margin;
-        $shippingCost = 1000;
-        $salePrice = $this->saleService->calculateSalePrice($quantity, $unitCost, $profitMargin, $shippingCost);
-        $profit = $this->saleService->calculateProfit($quantity, $unitCost, $salePrice, $shippingCost);
+        $salePrice = $this->saleService->calculateSalePrice($quantity, $unitCost, $profitMargin, $this->shippingCost->shipping_cost);
+        $profit = $this->saleService->calculateProfit($quantity, $unitCost, $salePrice, $this->shippingCost->shipping_cost);
         $params = [
             'quantity' => $quantity,
             'unit_cost' => $unitCost,
@@ -51,8 +57,9 @@ class CreateSaleTest extends TestCase
                 'quantity' => 100,
                 'unit_cost' => 10,
                 'profit' => $profit,
-                'shipping_cost' => config('coffee.shipping_cost'),
+                'shipping_cost_id' => $this->shippingCost->id,
                 'sale_price' => $salePrice,
+                'coffee_id'=> $this->coffee->id
         ]);
     }
 

@@ -109,9 +109,9 @@
         return {
             selectedCoffeeId: '',
             coffees: {!! json_encode($items) !!},
+            shippingCost: {!! $shippingCost !!},
             selectedCoffee: null,
             sales: [],
-            shippingCost: 1000,
             unitCost: '',
             quantity: '',
             errorMessage: '',

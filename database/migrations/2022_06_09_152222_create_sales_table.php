@@ -17,11 +17,15 @@ return new class extends Migration
             $table->id();
             $table->unsignedInteger('quantity');
             $table->unsignedInteger('unit_cost');
-            $table->unsignedInteger('shipping_cost');
             $table->unsignedInteger('sale_price');
             $table->unsignedInteger('profit');
-            $table->unsignedBigInteger('coffee_id')->nullable();
+
+            $table->unsignedBigInteger('shipping_cost_id');
+            $table->foreign('shipping_cost_id')->references('id')->on('shipping_costs');
+
+            $table->unsignedBigInteger('coffee_id');
             $table->foreign('coffee_id')->references('id')->on('coffees');
+
             $table->timestamps();
         });
     }

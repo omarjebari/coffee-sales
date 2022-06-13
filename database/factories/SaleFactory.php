@@ -6,6 +6,7 @@ namespace Database\Factories;
 
 use App\Models\Coffee;
 use App\Models\Sale;
+use App\Models\ShippingCost;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class SaleFactory extends Factory
@@ -27,14 +28,15 @@ class SaleFactory extends Factory
         $quantity = $this->faker->numberBetween(1, 50);
         $unitCost = $this->faker->numberBetween(1000, 2000);
         $profitMargin = $this->faker->numberBetween(1, 90);
-        $shippingCost = $this->faker->numberBetween(1, 5);
-        $salePrice = (($quantity * $unitCost)/(1-($profitMargin/100))) + $shippingCost;
-        $profit = $salePrice - $shippingCost - ($quantity * $unitCost);
+        $shippingCost = ShippingCost::factory();
+        $shipCost = $shippingCost->shipping_cost;
+        $salePrice = (($quantity * $unitCost)/(1-($profitMargin/100))) + $shipCost;
+        $profit = $salePrice - $shipCost - ($quantity * $unitCost);
         return [
             'quantity' => $quantity,
             'unit_cost' => $unitCost,
             'profit' => $profit,
-            'shipping_cost' => $shippingCost,
+            'shipping_cost' => ShippingCost::factory(),
             'sale_price' => $salePrice,
             'coffee_id' => Coffee::factory(),
         ];

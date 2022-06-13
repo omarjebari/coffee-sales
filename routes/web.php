@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\SaleController;
+use App\Http\Controllers\ShippingCostController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,8 +23,6 @@ Route::redirect('/dashboard', '/sales');
 
 Route::get('/sales', [SaleController::class, 'sales'])->middleware(['auth'])->name('coffee.sales');
 
-Route::get('/shipping-partners', function () {
-    return view('shipping_partners');
-})->middleware(['auth'])->name('shipping.partners');
+Route::get('/shipping-partners', [ShippingCostController::class, 'shippingPartners'])->middleware(['auth'])->name('shipping.partners');
 
 require __DIR__.'/auth.php';
