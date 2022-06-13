@@ -13,13 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('sales', function (Blueprint $table) {
+        Schema::create('coffees', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('quantity');
-            $table->unsignedInteger('unit_cost');
-            $table->unsignedInteger('shipping_cost');
-            $table->unsignedInteger('sale_price');
-            $table->unsignedInteger('profit');
+            $table->string('name');
+            $table->unsignedInteger('profit_margin');
             $table->timestamps();
         });
     }
@@ -31,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sales');
+        Schema::dropIfExists('coffees');
     }
 };

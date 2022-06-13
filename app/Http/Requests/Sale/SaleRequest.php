@@ -23,6 +23,7 @@ class SaleRequest extends FormRequest
         return [
             'quantity' => 'required|integer',
             'unit_cost' => 'required|integer',
+            'coffee_id' => 'required|exists:coffees,id'
         ];
     }
 }

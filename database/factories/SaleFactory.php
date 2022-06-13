@@ -32,7 +32,6 @@ class SaleFactory extends Factory
         return [
             'quantity' => $quantity,
             'unit_cost' => $unitCost,
-            'profit_margin' => $profitMargin,
             'profit' => $profit,
             'shipping_cost' => $shippingCost,
             'sale_price' => $salePrice,

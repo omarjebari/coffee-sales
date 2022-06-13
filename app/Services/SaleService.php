@@ -14,9 +14,8 @@ class SaleService implements SaleServiceInterface
         return Sale::all();
     }
 
-    public function store(int $quantity, float $unitCost)
+    public function store(int $quantity, float $unitCost, int $profitMargin)
     {
-        $profitMargin = config('coffee.profit_margin');
         $shippingCost = config('coffee.shipping_cost');
         $salePrice = $this->calculateSalePrice($quantity, $unitCost, $profitMargin, $shippingCost);
         $profit = $this->calculateProfit($quantity, $unitCost, $salePrice, $shippingCost);

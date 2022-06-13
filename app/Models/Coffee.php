@@ -10,17 +10,14 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $name
  * @property int $id
  */
-class Sale extends Model
+class Coffee extends Model
 {
     use HasFactory;
 
-    protected $table = 'sales';
+    protected $table = 'coffees';
 
     protected $fillable = [
-        'quantity',
-        'unit_cost',
-        'profit',
-        'shipping_cost',
-        'sale_price',
+        'name',
+        'profit_margin',
     ];
 }

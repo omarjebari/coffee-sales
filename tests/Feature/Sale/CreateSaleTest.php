@@ -2,9 +2,11 @@
 
 namespace Tests\Feature\Sale;
 
+use App\Models\Coffee;
 use App\Models\User;
 use App\Services\Interfaces\SaleServiceInterface;
 use App\Services\SaleService;
+use Database\Seeders\CoffeeSeeder;
 use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\Sanctum;
@@ -16,13 +18,16 @@ class CreateSaleTest extends TestCase
 
     protected SaleServiceInterface $saleService;
     protected User $user;
+    protected Coffee $coffee;
 
     protected function setUp(): void
     {
         parent::setUp();
         $this->seed(UserSeeder::class);
+        $this->seed(CoffeeSeeder::class);
         $this->saleService = new SaleService();
         $this->user = User::all()->first();
+        $this->coffee = Coffee::all()->first();
     }
 
     public function test_sale_is_stored()
@@ -30,13 +35,14 @@ class CreateSaleTest extends TestCase
         Sanctum::actingAs($this->user);
         $quantity = 100;
         $unitCost = 10;
-        $profitMargin = 25;
+        $profitMargin = $this->coffee->profit_margin;
         $shippingCost = 1000;
         $salePrice = $this->saleService->calculateSalePrice($quantity, $unitCost, $profitMargin, $shippingCost);
         $profit = $this->saleService->calculateProfit($quantity, $unitCost, $salePrice, $shippingCost);
         $params = [
             'quantity' => $quantity,
             'unit_cost' => $unitCost,
+            'coffee_id' => $this->coffee->id
         ];
         $this->actingAs($this->user)
             ->postJson(route('sales.store'), $params)
@@ -44,7 +50,6 @@ class CreateSaleTest extends TestCase
         $this->assertDatabaseHas('sales', [
                 'quantity' => 100,
                 'unit_cost' => 10,
-                'profit_margin' => config('coffee.profit_margin'),
                 'profit' => $profit,
                 'shipping_cost' => config('coffee.shipping_cost'),
                 'sale_price' => $salePrice,
@@ -59,6 +64,7 @@ class CreateSaleTest extends TestCase
         $params = [
             'quantity' => $quantity,
             'unit_cost' => $unitCost,
+            'coffee_id' => $this->coffee->id
         ];
         $this->actingAs($this->user)
             ->postJson(route('sales.store'), $params)

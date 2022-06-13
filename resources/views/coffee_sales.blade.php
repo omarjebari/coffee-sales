@@ -16,6 +16,16 @@
                     <div class="flex flex-row justify-between mb-8">
                         <div class="flex flex-row">
                             <div class="mr-8">
+                                <label class="block" for="coffee">Product</label>
+                                <select class="form-control" id="coffee" x-model="selectedCoffeeId">
+                                    <option value="">Select Coffee</option>
+                                    @foreach($items as $item)
+                                        <option value="{{$item->id}}">{{$item->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="mr-8">
                                 <label class="block" for="quantity">Quantity</label>
                                 <input type="number" class="block" id="quantity" min="0" step="1" x-model="quantity" oninput="validity.valid||(value='');" @change="showError=false" />
                             </div>
@@ -38,7 +48,8 @@
                                     },
                                     body: JSON.stringify({
                                         quantity: parseInt(quantity),
-                                        unit_cost: unitCost * 100
+                                        unit_cost: unitCost * 100,
+                                        coffee_id: parseInt(selectedCoffeeId)
                                     })
                                 }).then(response => {
                                     if (response.ok) {
@@ -92,8 +103,10 @@
 <script>
     function coffeeData() {
         return {
+            selectedCoffeeId: '',
+            coffees: {!! json_encode($items) !!},
+            selectedCoffee: null,
             sales: [],
-            profitMargin: 25,
             shippingCost: 1000,
             unitCost: '',
             quantity: '',
@@ -106,11 +119,21 @@
                 });
             },
             get calculatedSalePrice() {
-                if (this.unitCost && !isNaN(this.unitCost) && this.quantity && !isNaN(this.quantity)) {
+                if (this.profitMargin && this.unitCost && !isNaN(this.unitCost) && this.quantity && !isNaN(this.quantity)) {
                     const salePrice = Math.ceil((this.quantity * this.unitCost * 100) / (1-(this.profitMargin/100)) + this.shippingCost)/100;
                     return this.formatCurrency(salePrice);
                 }
                 return 'N/A';
+            },
+            get profitMargin() {
+                if (this.selectedCoffeeId) {
+                    // Get the profit margin from the list of coffees
+                    const coffee = this.coffees.find(element => element.id === parseInt(this.selectedCoffeeId));
+                    if (coffee) {
+                        return coffee.profit_margin;
+                    }
+                }
+                return '';
             },
             displayError(message) {
                 this.errorMessage = message;
