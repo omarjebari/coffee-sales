@@ -27,4 +27,12 @@ Route::get('/shipping-partners', function () {
     return view('shipping_partners');
 })->middleware(['auth'])->name('shipping.partners');
 
+
+
+
+
+
+
+
+
 require __DIR__.'/auth.php';
