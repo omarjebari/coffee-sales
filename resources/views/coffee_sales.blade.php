@@ -9,7 +9,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
 
-                <div class="p-6 bg-white border-b border-gray-200 flex flex-col" x-data="coffeeData()" x-init="fetch('http://coffee-test.test/api/sales').then(response => response.json()).then(data => sales = data)">
+                <div class="p-6 bg-white border-b border-gray-200 flex flex-col" x-data="coffeeData()" x-init="fetch('api/sales').then(response => response.json()).then(data => sales = data)">
 
                     <div class="text-red-600" x-show="showError" x-text="errorMessage"></div>
 
@@ -31,7 +31,7 @@
                         <div>
                             <button
                                 class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                                @click="fetch('http://coffee-test.test/api/sales/store', {
+                                @click="fetch('api/sales/store', {
                                     method: 'POST',
                                     headers: {
                                         'Content-Type': 'application/json'
@@ -42,7 +42,7 @@
                                     })
                                 }).then(response => {
                                     if (response.ok) {
-                                        fetch('http://coffee-test.test/api/sales').then(response => response.json()).then(data => {
+                                        fetch('api/sales').then(response => response.json()).then(data => {
                                             sales = data;
                                             unitCost = '';
                                             quantity = '';
