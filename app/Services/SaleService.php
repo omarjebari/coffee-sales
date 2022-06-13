@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace App\Services;
 
+use App\Models\Coffee;
 use App\Models\Sale;
 use App\Services\Interfaces\SaleServiceInterface;
 
@@ -14,18 +15,18 @@ class SaleService implements SaleServiceInterface
         return Sale::all();
     }
 
-    public function store(int $quantity, float $unitCost, int $profitMargin)
+    public function store(int $quantity, float $unitCost, Coffee $coffee)
     {
         $shippingCost = config('coffee.shipping_cost');
-        $salePrice = $this->calculateSalePrice($quantity, $unitCost, $profitMargin, $shippingCost);
+        $salePrice = $this->calculateSalePrice($quantity, $unitCost, (int)$coffee->profit_margin, $shippingCost);
         $profit = $this->calculateProfit($quantity, $unitCost, $salePrice, $shippingCost);
         return Sale::create([
             'quantity' => $quantity,
             'unit_cost' => $unitCost,
-            'profit_margin' => $profitMargin,
             'profit' => $profit,
             'shipping_cost' => $shippingCost,
             'sale_price' => $salePrice,
+            'coffee_id' => $coffee->id
         ]);
     }
 

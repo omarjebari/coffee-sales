@@ -22,7 +22,7 @@ class SaleController extends Controller
 
     public function index(): AnonymousResourceCollection
     {
-        return SaleResource::collection(Sale::all());
+        return SaleResource::collection(Sale::with('coffee')->get());
     }
 
     public function store(SaleRequest $request, SaleServiceInterface $saleService): JsonResponse
@@ -30,7 +30,7 @@ class SaleController extends Controller
         $quantity = $request->validated('quantity');
         $unitCost = $request->validated('unit_cost');
         $coffee = Coffee::find($request->validated('coffee_id'));
-        return (new SaleResource($saleService->store($quantity, $unitCost, (int)$coffee->profit_margin)))
+        return (new SaleResource($saleService->store($quantity, $unitCost, $coffee)))
             ->response()
             ->setStatusCode(201);
     }

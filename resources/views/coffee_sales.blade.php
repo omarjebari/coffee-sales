@@ -74,9 +74,11 @@
                         <table class="w-1/2 border-collapse border border-slate-500">
                             <thead>
                             <tr>
+                                <th class="border border-slate-600 text-center">Product</th>
                                 <th class="border border-slate-600 text-center">Quantity</th>
                                 <th class="border border-slate-600 text-center">Unit Cost</th>
                                 <th class="border border-slate-600 text-center">Selling Price</th>
+                                <th class="border border-slate-600 text-center">Sold At</th>
                             </tr>
                             </thead>
                             <template x-if="sales.length">
@@ -86,9 +88,11 @@
                                     :key="sale.id"
                                 >
                                     <tr>
+                                        <td class="border border-slate-700 text-center" x-text="sale.coffee.name"></td>
                                         <td class="border border-slate-700 text-center" x-text="sale.quantity"></td>
                                         <td class="border border-slate-700 text-center" x-text="formatCurrency(sale.unit_cost)"></td>
                                         <td class="border border-slate-700 text-center" x-text="formatCurrency(sale.sale_price)"></td>
+                                        <td class="border border-slate-700 text-center" x-text="formatCurrency(sale.sold_at)"></td>
                                     </tr>
                                 </template>
                                 </tbody>

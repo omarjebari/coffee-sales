@@ -20,6 +20,8 @@ return new class extends Migration
             $table->unsignedInteger('shipping_cost');
             $table->unsignedInteger('sale_price');
             $table->unsignedInteger('profit');
+            $table->unsignedBigInteger('coffee_id')->nullable();
+            $table->foreign('coffee_id')->references('id')->on('coffees');
             $table->timestamps();
         });
     }

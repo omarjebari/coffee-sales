@@ -16,14 +16,13 @@ class CoffeeSeeder extends Seeder
      */
     public function run()
     {
-        $coffeeNames = [
-            'Arabic Coffee',
-            'Gold Coffee'
-        ];
-        foreach ($coffeeNames as $coffeeName) {
-            Coffee::factory()->create([
-                'name' => $coffeeName,
-            ]);
-        }
+        Coffee::factory()->create([
+            'name' => 'Gold Coffee',
+            'profit_margin' => 25,
+        ]);
+        Coffee::factory()->create([
+            'name' => 'Arabic Coffee',
+            'profit_margin' => 15,
+        ]);
     }
 }

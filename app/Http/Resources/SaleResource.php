@@ -6,6 +6,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Carbon;
 
 class SaleResource extends JsonResource
 {
@@ -21,9 +22,11 @@ class SaleResource extends JsonResource
             'id' => $this->id,
             'quantity' => $this->quantity,
             'unit_cost' => $this->unit_cost/100,
-            'profit_margin' => $this->profit_margin,
+            'profit' => $this->profit/100,
             'shipping_cost' => $this->shipping_cost/100,
             'sale_price' => $this->sale_price/100,
+            'sold_at' => Carbon::parse($this->created_at)->format('Y-m-d H:i'),
+            'coffee' => $this->whenLoaded('coffee'),
         ];
     }
 }

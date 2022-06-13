@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
+use App\Models\Coffee;
 use App\Models\Sale;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -35,6 +36,7 @@ class SaleFactory extends Factory
             'profit' => $profit,
             'shipping_cost' => $shippingCost,
             'sale_price' => $salePrice,
+            'coffee_id' => Coffee::factory(),
         ];
     }
 }
